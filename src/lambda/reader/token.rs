@@ -6,18 +6,25 @@ pub fn new_token(raw: String, position: TokenPosition) -> Token {
         ty: match raw.chars().nth(0).unwrap() {
             'a'..='z' | 'A'..='Z' => { match raw.as_str() {
                 "true" | "false" => TokenType::Boolean(raw.parse().unwrap()),
-                "of" | "end" | "print" | "int" | "char" | "bool" | "string" | "float" =>
+                "of" | "end" | "int" | "char" | "bool" | "string" | "float" =>
                     TokenType::Keyword(raw.clone()),
                 _ => TokenType::Identifier(raw.clone())
             } },
             '0'..='9' => { if raw.find('.') != None {
                 TokenType::Float(raw.parse().unwrap())
             } else {
-                TokenType::Number(raw.parse().unwrap())
+                TokenType::Number(raw.clone())
             } },
             '"' => TokenType::String(raw.parse().unwrap()),
             '\'' => TokenType::Char(raw.chars().nth(0).unwrap()),
-            ' ' | '\n' => TokenType::Space,
+            '`' => TokenType::Atom(raw.clone()[1..raw.len()-1].to_string()),
+            ' ' => TokenType::Space,
+            '\r' => TokenType::Newline,
+            '/' => if raw.starts_with("//") {
+                TokenType::Comment
+            } else {
+                TokenType::Symbol(raw.clone())
+            },
             _ => TokenType::Symbol(raw.clone())
         },
         raw,
@@ -41,16 +48,20 @@ pub struct TokenPosition {
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum TokenType {
-    Number(u128),
+    Number(String),
     Float(f64),
     Char(char),
     String(String),
     Boolean(bool),
     Identifier(String),
+    Atom(String),
     Keyword(String),
     Symbol(String),
 
-    Space
+    Space,
+    Newline,
+    End,
+    Comment
 }
 
 #[derive(Debug, Clone)]

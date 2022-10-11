@@ -19,13 +19,13 @@ fn get_color(level: StatusLevel) -> fn(String) -> ColoredString {
 fn get_mode(ty: StatusType) -> fn(Status, Option<Token>) -> () {
     match ty {
         StatusType::Lex => |s, t| {
-            /**
-             * Lex <status_level>: <status_message>
-             * ---| path: <status_module_path>
-             *    |
-             * 12 | <token_raw>
-             *    |
-             */
+            // /**
+            //  * Lex <status_level>: <status_message>
+            //  * ---| path: <status_module_path>
+            //  *    |
+            //  * 12 | <token_raw>
+            //  *    |
+            //  */
             println!(
                 "{}: {:?} {} {}: {:?}",
                 "lexing token".bright_white().bold(),

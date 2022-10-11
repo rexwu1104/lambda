@@ -1,6 +1,6 @@
 use regex::Regex;
 
-use super::{this::{Reader, ReaderTree, create_reader, SymbolRule}, token::Token};
+use super::{this::{Reader, ReaderTree, create_reader, SymbolRule}, token::{Token, TokenType}};
 
 #[inline]
 fn import(reader: &mut Reader) -> Vec<String> {
@@ -76,4 +76,29 @@ pub fn get_vec(rules: Vec<SymbolRule>, reader: &mut Reader) -> (Vec<Token>, Vec<
 #[inline]
 pub fn lex(path: String) -> ReaderTree {
     pre_process(&mut create_reader(path, "__main".to_lowercase(), None))
+}
+
+pub fn remove_surplus(tokens: Vec<Token>) -> Vec<Token> {
+    let mut tokens = tokens.clone();
+    let mut end = 0;
+    let mut del_buf: Vec<usize> = vec![];
+    for (idx, token) in tokens.iter().enumerate() {
+        if token.ty == TokenType::Comment && idx != 0 {
+            if let TokenType::Symbol(s) = tokens[idx - 1].ty.clone() {
+                if s == "/" && del_buf.iter().find(|&&i| i == idx - 1) == None {
+                    del_buf.push(idx-1);
+                }
+            }
+        }
+
+        if token.position.end > end {
+            end = token.position.end;
+        } else {
+            del_buf.push(idx);
+        }
+    }
+
+    del_buf.iter().rev().for_each(|&i| { tokens.remove(i); });
+
+    tokens
 }

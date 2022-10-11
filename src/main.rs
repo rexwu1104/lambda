@@ -2,7 +2,7 @@ use std::time::Instant;
 
 use lambda::reader::methods::lex;
 
-use crate::lambda::parser::{this::Parser, methods::parse};
+use crate::lambda::parser::{this::new_parser, methods::parse};
 
 pub mod lambda;
 
@@ -10,7 +10,7 @@ pub mod lambda;
 
 fn main() -> () {
     let start = Instant::now();
-    parse(&mut Parser::new(lex("./test/main.ld".to_string())));
+    parse(&mut new_parser(lex("./test/main.ld".to_string())));
     println!("{} milliseconds", (Instant::now() - start).as_millis());
 }
 

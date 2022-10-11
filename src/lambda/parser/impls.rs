@@ -1,9 +1,9 @@
-use crate::lambda::reader::this::ReaderTree;
+use super::{iter::StatementIter, tree::Statement, generate::generate_statement};
 
-use super::this::Parser;
+impl Iterator for StatementIter {
+    type Item = Statement;
 
-impl Parser {
-    pub fn new(tree: ReaderTree) -> Parser {
-        Parser { tree }
+    fn next(&mut self) -> Option<Self::Item> {
+        generate_statement(self)
     }
 }

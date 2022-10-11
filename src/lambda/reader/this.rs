@@ -16,9 +16,9 @@ pub fn create_reader(file: String, module: String, home: Option<String>) -> Read
 }
 
 #[inline]
-pub fn create_system_rule(symbol: &str, variables: Vec<String>) -> SymbolRule {
+pub fn create_system_rule(symbol: &str, raw: String, variables: Vec<String>) -> SymbolRule {
     SymbolRule {
-        raw: String::new(),
+        raw,
         symbols: symbol.chars().collect(),
         variables,
         body: String::from("builtin")
@@ -38,7 +38,7 @@ pub struct ReaderTree {
     pub now: Reader
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SymbolRule {
     pub raw: String,
     pub symbols: Vec<char>,

@@ -1,9 +1,7 @@
 Statement
     ::= Define
     ::= Decorators Define
-    ::= Import
 
-Import ::= "formula" String
 Decorators ::= "@" Identifier
 
 Define
@@ -17,10 +15,6 @@ DefineMacro
     ::= "`" Identifier "`" "of" Params Anys "end"
 
 DefineFunction
-    ::= Rule DFunction
-    ::= DFunction
-
-DFunction
     ::= Identifier "of" Params Expression
     ::= Identifier "of" Params Expressions "end"
     ::= Identifier "of" Params Conditions "end"
@@ -36,8 +30,6 @@ Cond
     ::= CmpOp Value
     ::= Value CmpOp "$" CmpOp Value
     ::= Cond CondConcat Cond
-    ::= "{" CondSet "|" Cond "}"
-    ::= "{" CondSet ":" Cond "}"
     ::= Range
     ::= "?"
     ::= "_"
@@ -45,15 +37,6 @@ Cond
 CondConcat
     ::= "|"
     ::= "&"
-
-CondSet
-    ::= Identifier
-    ::= Identifier "N"
-    ::= Identifier "Z"
-    ::= Identifier "Q"
-    ::= Identifier "R"
-    ::= Identifier "C"
-    ::= Cond
 
 Range
     ::= "(" Value "," Value ")"
@@ -68,12 +51,12 @@ TypeStruct
     ::= "=" ClassBody "end"
 
 Types
-    ::= Types "," Type
+    ::= Types Type
     ::= Type
 
 TypePair ::= Identifier ":" Type
 TypePairs
-    ::= TypePairs "," TypePair
+    ::= TypePairs TypePair
     ::= TypePair
 
 ClassBody ::= Bodys
@@ -114,6 +97,8 @@ Value
     ::= Tuple
     ::= Array
     ::= Lambda
+    ::= Value Symbol Value
+    ::= Symbol Value
 
 Tuple ::= "(" Values ")"
 Array ::= "[" Values "]"
@@ -123,23 +108,3 @@ Param ::= Identifier
 Params
     ::= Params Param
     ::= Param
-
-
-<=>
-
-=
-,
-|| &&
-> < >= <= == != !
-% ++
-**
-+ -
-* / ..
-<< >> | & ^ ~
-@ $ ; _
-[ ] . |> ?
-: =>
--------------------------------------------------------------
-" ' ` #
-( ) { }
-\ ->
